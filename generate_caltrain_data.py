@@ -1,4 +1,4 @@
-from utils import as_frame, trajet, deltat_forward_column, get_good_trajet, DATA_DIR
+from utils.generate_data import as_frame, trajet, deltat_forward_column, get_good_trajet, DATA_DIR
 import os
 import pandas as pd
 import time

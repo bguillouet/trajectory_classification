@@ -1,4 +1,4 @@
-from utils import filter_data, polyline_to_df, DATA_DIR
+from utils.generate_data import filter_data, polyline_to_df, DATA_DIR
 import pandas as pd
 import numpy as np
 import time
