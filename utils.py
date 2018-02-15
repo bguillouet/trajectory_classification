@@ -3,6 +3,73 @@ import numpy as np
 from traj_dist.cydist.basic_geographical import c_great_circle_distance
 import collections
 
+DATA_DIR = "/Users/bguillouet/These/trajectory-classification/data/"
+
+# Read Poi's Limit
+POI_DIR = DATA_DIR + "/POI.csv"
+POI_DF = pd.read_csv(POI_DIR, index_col=0)
+LON_SB, LAT_SB, TOL_LONS_SB, TOL_LATS_SB = POI_DF.loc["SaoBento"].values
+LON_C, LAT_C, TOL_LONS_C, TOL_LATS_C = POI_DF.loc["Caltrain"].values
+
+# Read Area's Limit
+SQUARE_DIR = DATA_DIR + "/square.csv"
+SQUARE_DF = pd.read_csv(SQUARE_DIR, index_col=0)
+LON_INF_P, LON_SUP_P, LAT_INF_P, LAT_SUP_P = SQUARE_DF.loc["porto"].values
+LON_INF_SF, LON_SUP_SF, LAT_INF_SF, LAT_SUP_SF = SQUARE_DF.loc["san_francisco"].values
+
+
+COLUMNS = ["lats", "lons", "occupancy", "time", "id_traj"]
+
+#########
+# Porto #
+#########
+
+def speed_under_25(l_final):
+    n = len(l_final)
+    i = 0
+    under25 = True
+    lons_i1 = l_final[0][0]
+    lats_i1 = l_final[0][1]
+    while (under25 and i < n):
+        lons_i = l_final[i][0]
+        lats_i = l_final[i][1]
+        d = c_great_circle_distance(lons_i, lats_i, lons_i1, lats_i1)
+        lons_i1 = lons_i
+        lats_i1 = lats_i
+        under25 = d / 15 <= 25
+        i = i + 1
+
+    return under25
+
+def filter_data(pl, t):
+    pl_split = pl.split("],[")
+    boolf = False
+    l_final = []
+    if 2 < len(pl_split) <= 60:
+        loc_start = map(float, pl_split[0][2:].split(","))
+        if equal_tol(loc_start[0], LON_SB, TOL_LONS_SB) and equal_tol(loc_start[1], LAT_SB, TOL_LATS_SB):
+            loc_end = map(float, pl_split[-1][:-2].split(","))
+            if LON_INF_P < loc_end[0] < LON_SUP_P and LAT_INF_P < loc_end[1] < LAT_SUP_P:
+                l_final = [loc_start] + [map(float, x.split(",")) for x in pl_split[1:-1]] + [loc_end]
+                if speed_under_25(l_final):
+                    boolf = True
+    return boolf, l_final, t
+
+
+def polyline_to_df(coord, t, idt, columns = COLUMNS):
+    nrow = len(coord)
+    lons = coord[:, 0]
+    lats = coord[:, 1]
+    occupancy = np.hstack((np.repeat(1, nrow - 1), 0))
+    time = np.arange(t, t + nrow * 15, 15)
+    id_traj = np.repeat(idt, nrow)
+    new_traj = pd.DataFrame(np.array([lats, lons, occupancy, time, id_traj]).T, columns=columns)
+    return new_traj
+
+
+#################
+# San Francisco #
+#################
 
 def as_frame(name):
     """USAGE
@@ -85,18 +152,6 @@ def equal_tol(a, b, tol=0.):
     rep = abs(a - b) < tol
     return rep
 
-
-CALTRAIN_LATS = 37.7767
-CALTRAIN_LONS = -122.395
-TOL_LATS = 0.0005
-TOL_LONS = 0.001
-
-LAT_INF = 37.74752
-LAT_SUP = 37.8163
-LON_INF = -122.45752
-LON_SUP = -122.37101000000001
-
-
 def get_good_trajet(df_traj):
 
     # Trajectory with more than two locations
@@ -104,16 +159,16 @@ def get_good_trajet(df_traj):
 
     # Trajectory with Pickup train in Caltrain Area
     df_pickup = df_traj[df_traj["pickup"]][["lons", "lats", "id_traj"]].values
-    id_traj_in_caltrain = [int(idt) for lo, la, idt in df_pickup if equal_tol(lo, CALTRAIN_LONS, TOL_LONS)
-                                                                and equal_tol(la, CALTRAIN_LATS, TOL_LATS)]
+    id_traj_in_caltrain = [int(idt) for lo, la, idt in df_pickup if equal_tol(lo, LON_C, TOL_LONS_C)
+                                                                and equal_tol(la, LAT_C, TOL_LATS_C)]
     correct_id_traj = correct_id_traj.intersection(set(id_traj_in_caltrain))
 
     # Trajectory with speed higher than 25
     incorrect_speed = set(df_traj[df_traj["speed"] > 25].id_traj)
 
     # Trajectory outside of the box
-    end_area = np.logical_and(np.logical_and(df_traj.lons > LON_INF, df_traj.lons < LON_SUP),
-                              np.logical_and(df_traj.lats > LAT_INF, df_traj.lats < LAT_SUP))
+    end_area = np.logical_and(np.logical_and(df_traj.lons > LON_INF_SF, df_traj.lons < LON_SUP_SF),
+                              np.logical_and(df_traj.lats > LAT_INF_SF, df_traj.lats < LAT_SUP_SF))
     incorect_location = set(df_traj.id_traj[np.logical_not(end_area)])
 
     correct_id_traj = correct_id_traj.difference(incorect_location.union(incorrect_speed))

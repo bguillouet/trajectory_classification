@@ -1,18 +1,19 @@
-from utils import as_frame, trajet, deltat_forward_column, get_good_trajet
+from utils import as_frame, trajet, deltat_forward_column, get_good_trajet, DATA_DIR
 import os
 import pandas as pd
+import time
 
 
-
-DATA_DIR = "/Users/bguillouet/These/trajectory-classification/data/"
 INPUT_FILES = map(lambda x: DATA_DIR + '/cabspotting/' + x, os.listdir(DATA_DIR + '/cabspotting/'))
+OUTPUT_FILE = DATA_DIR+"Caltrain.pkl"
 
+
+print("Generate Caltrain dataset from files in " + DATA_DIR + '/cabspotting/ folder.')
+
+ts = time.time()
 data_to_merge = []
-
 nb_traj = 0
 for i,f_name in enumerate(INPUT_FILES):
-    if i%50==0:
-         print(i)
     # Load Data
     df = as_frame(f_name)
 
@@ -35,15 +36,18 @@ for i,f_name in enumerate(INPUT_FILES):
     correct_id_traj = get_good_trajet(df_traj)
     df_good_traj = df_traj[df_traj.id_traj.isin(correct_id_traj)]
 
-
     data_to_merge.append(df_good_traj)
 
 data_caltrain = pd.concat(data_to_merge)
 new_id_dict = dict([(v,k) for k,v in enumerate(data_caltrain.id_traj.unique())])
-
 data_caltrain["id_traj"] = [new_id_dict[idt] for idt in data_caltrain["id_traj"]]
+nb_traj = len(data_caltrain.id_traj.unique())
+te = time.time()
 
-data_caltrain.to_pickle(DATA_DIR+"Caltrain.pkl")
+
+print("%d Trip extracted in %.1f seconds." %(nb_traj, te-ts))
+data_caltrain.to_pickle(OUTPUT_FILE)
+print("File "+ OUTPUT_FILE + " saved.")
 
 
 
