@@ -1,0 +1,3 @@
+name,lons,lats,tol_lons,tol_lats
+Caltrain,-122.395,37.7767,0.001,0.0005
+SaoBento,-8.610745,41.145525,0.000345,0.000445

@@ -3,7 +3,7 @@ import numpy as np
 from traj_dist.cydist.basic_geographical import c_great_circle_distance
 import collections
 
-DATA_DIR = "/Users/bguillouet/These/trajectory-classification/data/"
+DATA_DIR = "data/"
 
 # Read Poi's Limit
 POI_DIR = DATA_DIR + "/POI.csv"

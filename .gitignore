@@ -1,3 +1,9 @@
-data/
 utils.pyc
 .idea/
+data/cabspotting/
+data/caltrain_sspd_matrix.npy
+data/caltrain_traj_labels.pkl
+data/Caltrain.pkl
+data/sao_bento_sspd_matrix.npy
+data/Sao_bento.pkl
+data/train.csv
