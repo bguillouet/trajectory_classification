@@ -12,10 +12,15 @@ It is a subset of the cabspotting data set [3].
  To generate this subset, download cabspotting file [3], move it into data folder and run `generate_caltrain_data.py`
 script.
 
+![caltrain dataset](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/caltrain_dataset.png)
+
 * **Sao Bento dataset** is composed of 19423 trajectories from taxis which begin their trip at Sao Bento station, Porto.
 It is a subset of train dataset of the Kaggle ECML/PKDD 15: Taxi Trajectory Prediction (I) competition [3].
 To generate this subset, download train.csv file [4], move it into data folder and run `generate_saobento_data.py`
 script.
+
+![sao bento dataset](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/sao_bento_dataset.png)
+
 
 # Trajectory clustering
 
@@ -23,6 +28,7 @@ script.
  2. `trajectory_clustering.py`: Hierarchical clustering is then perfomed on the distance matrices.
  3. `generate_figure.py`: Produce the following png file.
  
+![Caltrain classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/sao_bento_trajectory_clustering.png)
 
  
  # Trajectory Classification
