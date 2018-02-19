@@ -28,6 +28,8 @@ script.
  2. `trajectory_clustering.py`: Hierarchical clustering is then perfomed on the distance matrices.
  3. `generate_figure.py`: Produce the following png file.
  
+![Caltrain classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/caltrain_trajectory_clustering.png)
+
 ![Caltrain classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/sao_bento_trajectory_clustering.png)
 
  
