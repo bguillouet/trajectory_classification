@@ -8,3 +8,7 @@ data/Caltrain.pkl
 data/sao_bento_sspd_matrix.npy
 data/Sao_bento.pkl
 data/train.csv
+data/gmm_cv_models_Caltrain.pkl
+data/gmm_cv_models_saobento.pkl
+data/gmm_scores_Caltrain.pkl
+data/gmm_scores_saobento.pkl
