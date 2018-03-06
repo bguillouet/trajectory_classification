@@ -30,14 +30,30 @@ script.
  
 ![Caltrain classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/caltrain_trajectory_clustering.png)
 
-![Caltrain classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/sao_bento_trajectory_clustering.png)
+![Sao Bento classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/sao_bento_trajectory_clustering.png)
 
  
  # Trajectory Classification
  
- Coming soon...
+ 1. `generate_mm_cv.py`: A 10-fold cross validation procedure to evaluate performance of the model describes in [2]
+and produce the following result : 
+```
+ Caltrain Dataset
+Percentage of well classified trajectory for Caltrain dataset : 90.89
+Percentage of of trajectories where good prediction are within best-3 predictions: 98.45
+SaoBento Dataset
+Percentage of well classified trajectory : 92.95
+Percentage of of trajectories where good prediction are within best-3 predictions: 99.35
+```
+
+2/ `generate_roc_curve.py` : Produce the following roc curve from cross validation procedure.
+
+![Caltrain Roc curves](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/Caltrain_roc.png)
+
+![Sao Bento Roc curves](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/Saobento_roc.png)
+
  
- # Dependencies.
+ # Dependencies
  
  * Python = 2.7.14
  * pandas = 0.22.0

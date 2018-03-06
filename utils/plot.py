@@ -24,7 +24,6 @@ def plot_starting_from_trajectories(ax, data, origin, origin_lons, origin_lats, 
     plt.legend(fontsize=25, numpoints=1)
 
 
-
 def plot_starting_from_trajectories_clusters(ax, data, origin_lons, origin_lats, labels, color_dic, scale_step=0.004):
     maplon = [data.lons.min(), data.lons.max()]
     maplat = [data.lats.min(), data.lats.max()]
@@ -41,3 +40,34 @@ def plot_starting_from_trajectories_clusters(ax, data, origin_lons, origin_lats,
     m.drawmeridians(np.arange(maplon[0], maplon[1] + scale_step * 2, scale_step * 2), fontsize=16, labelstyle="+/-",
                     labels=[0, 0, 0, 1], linewidth=0, rotation=45)
     ax.set_title("b - Result of Clustering", fontsize=44)
+
+
+def plot_roc(ax, roc_dic, color_dict, title, nb_tc):
+    for tc in range(nb_tc):
+        fpr, tpr ,auc_v = roc_dic[tc]
+        plt.plot(fpr, tpr, label="%.2f" % auc_v, color=color_dict[tc], linewidth=2, linestyle="-")
+
+    plt.plot([0, 1], [0, 1], linestyle="-.", color="black")
+    ax.set_xlabel("False positive rate", fontsize=35)
+    ax.set_ylabel("True positive rate", fontsize=35)
+    ax.set_xticks(np.arange(0, 1.05, 0.05))
+    ax.set_yticks(np.arange(0, 1.05, 0.05))
+    xtl = [str(x) if i % 2 == 0 else "" for i, x in enumerate(np.arange(0, 1.05, 0.05))]
+    ax.set_xticklabels(xtl)
+    ax.set_yticklabels(xtl)
+    ax.plot([0, 0], [1, 1], color="k", linestyle="dashed")
+    ax.yaxis.grid(True)
+    ax.xaxis.grid(True)
+    ax.set_title(title, fontsize=35)
+    for tick in ax.xaxis.get_major_ticks():
+        tick.label.set_fontsize(25)
+        tick.label.set_rotation(45)
+    for tick in ax.yaxis.get_major_ticks():
+        tick.label.set_fontsize(25)
+    if nb_tc == 25:
+        plt.legend(fontsize=16, ncol=2, loc=4, bbox_to_anchor=(1.38, 0.2), frameon=False, title="AUC per cluster")
+    elif nb_tc == 45:
+        plt.legend(fontsize=16, ncol=2, loc=4, bbox_to_anchor=(1.38, -0.01), frameon=False, title="AUC per cluster")
+    ax.get_legend().get_title().set_fontsize(22)
+    ax.set_xlim(0, 1)
+    ax.set_ylim(0, 1)

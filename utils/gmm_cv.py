@@ -3,6 +3,8 @@ import time
 import numpy as np
 import pandas as pd
 import warnings
+from sklearn.metrics import roc_curve, auc
+
 warnings.filterwarnings("ignore")
 
 
@@ -156,3 +158,22 @@ def compute_classification_score(data_original, data_score, labels, nb_traj):
     pct_good_classification = float((data_rank.groupby("id_traj").last()["position"] == 1).sum()) / nb_traj * 100
     pct_good_classification_top_3 = float((data_rank.groupby("id_traj").last()["position"] <= 3).sum()) / nb_traj * 100
     return pct_good_classification, pct_good_classification_top_3
+
+
+def create_roc_dict(data_original, data_score, labels, nb_tc):
+    data_cumsum = create_cumsum_data(data_score)
+    data_cumsum["id_traj"] = data_original.id_traj
+
+    data_gbit = data_cumsum.groupby("id_traj").last()
+    data_gbit["traj_clust"] = [labels[k] for k in data_gbit.index]
+
+    roc_dic = {}
+    for tc in range(nb_tc):
+        y = data_gbit["traj_clust"] == tc
+        scores = data_gbit["score_" + str(tc)].values
+
+        fpr, tpr, thresholds = roc_curve(y, scores, pos_label=1)
+        auc_v = auc(fpr, tpr)
+
+        roc_dic.update({tc: (fpr, tpr, auc_v)})
+    return roc_dic
