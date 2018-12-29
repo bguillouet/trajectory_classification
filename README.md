@@ -26,7 +26,7 @@ script.
 
  1. `compute_distance_matrix.py`: SSPD distance [1] are computed between trajectories of each dataset, using trajectory_distance package [5].
  2. `trajectory_clustering.py`: Hierarchical clustering is then perfomed on the distance matrices.
- 3. `generate_figure.py`: Produce the following png file.
+ 3. `figure_clustering.py`: Produce the following png file.
  
 ![Caltrain classification](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/caltrain_trajectory_clustering.png)
 
@@ -35,8 +35,9 @@ script.
  
  # Trajectory Classification
  
- 1. `generate_mm_cv.py`: A 10-fold cross validation procedure to evaluate performance of the model describes in [2]
-and produce the following result : 
+ 1. `generate_mm_cv.py`: A 10-fold cross validation procedure to evaluate performance of the model describes in [2].
+ 2. `trajectory_classification.py`: Run the classification model describes in [2] and produces the following results :
+
 ```
  Caltrain Dataset
 Percentage of well classified trajectory for Caltrain dataset : 90.89
@@ -46,7 +47,7 @@ Percentage of well classified trajectory : 92.95
 Percentage of of trajectories where good prediction are within best-3 predictions: 99.35
 ```
 
-2/ `generate_roc_curve.py` : Produce the following roc curve from cross validation procedure.
+2/ `figure_roc_curve.py` : Produce the following roc curve from cross validation procedure.
 
 ![Caltrain Roc curves](https://raw.githubusercontent.com/bguillouet/trajectory_classification/master/plot/Caltrain_roc.png)
 

@@ -27,11 +27,7 @@ gmm_cv, data_score = build_cross_clust_mixt_cv(data_original, cv_list, nb_traj_c
 pickle.dump(gmm_cv, open(DATA_DIR + "gmm_cv_models_Caltrain.pkl","wb"))
 data_score.to_pickle(DATA_DIR+"gmm_scores_Caltrain.pkl")
 
-# Compute trajectory's classification score
-pct_good_classification, pct_good_classification_top_3 = compute_classification_score(data_original, data_score, labels, nb_traj)
-
-print("Percentage of well classified trajectory : %.2f" %pct_good_classification )
-print("Percentage of of trajectories where good prediction are within best-3 predictions: %.2f \n" %pct_good_classification_top_3 )
+print("Gaussian Mixture Model build and saved")
 
 
 
@@ -59,12 +55,7 @@ gmm_cv, data_score = build_cross_clust_mixt_cv(data_original, cv_list, nb_traj_c
 pickle.dump(gmm_cv, open(DATA_DIR + "gmm_cv_models_saobento.pkl","wb"))
 data_score.to_pickle(DATA_DIR+"gmm_scores_saobento.pkl")
 
-
-# Compute trajectory's classification score
-pct_good_classification, pct_good_classification_top_3 = compute_classification_score(data_original, data_score, labels, nb_traj)
-
-print("Percentage of well classified trajectory : %.2f" %pct_good_classification )
-print("Percentage of of trajectories where good prediction are within best-3 predictions: %.2f \n" %pct_good_classification_top_3 )
+print("Gaussian Mixture Model build and saved")
 
 
 

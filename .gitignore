@@ -12,3 +12,6 @@ data/gmm_cv_models_Caltrain.pkl
 data/gmm_cv_models_saobento.pkl
 data/gmm_scores_Caltrain.pkl
 data/gmm_scores_saobento.pkl
+.ipynb_checkpoints/
+utils/__pycache__/
+*.pyc
